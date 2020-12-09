@@ -4,7 +4,7 @@ from chat.models import User
 
 
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ['username', 'first_name', 'last_name', 'email', 'status']
+    list_display = ['username', 'first_name', 'last_name', 'email', 'user_status']
     actions = ['ban_user', 'unban_user']
 
     @staticmethod
