@@ -22,10 +22,10 @@ def pytest_creating_users():
 @pytest.mark.django_db
 def pytest_banned_user():
     new_user = create_user('test_p_1', 'test_p_1@gmail.com', 'QAZ1598753')
-    assert str(User.objects.filter(username='test_p_1').values('user_status')) == "<QuerySet [{'user_status': 'a'}]>"
+    assert new_user.user_status == 'a'
 
     new_user.user_status = 'b'
     new_user.save()
 
-    assert str(User.objects.filter(username='test_p_1').values('user_status')) == "<QuerySet [{'user_status': 'b'}]>"
-    assert str(User.objects.filter(username='test_p_1').values('user_status')) != "<QuerySet [{'user_status': 'a'}]>"
+    assert new_user.user_status == 'b'
+    assert new_user.user_status != 'a'
