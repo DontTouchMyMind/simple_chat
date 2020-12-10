@@ -12,11 +12,10 @@ class GroupChatConsumer(BaseChatConsumer):
     async def connect(self):
         await super().connect()
         self.channel = ChatGroup.channel_name(self.scope['user'].id)
-
-    async def disconnect(self, code):
-        pass
+        await self.channel_layer.group_add(self.channel, self.channel_name)
 
     async def event_group_create(self, event):
+        """Функция создания группы"""
         name = event['data'].get('name')
         if not name:
             return await self._throw_error({'detail': 'Missing name room!'}, event=event['event'])
@@ -24,15 +23,18 @@ class GroupChatConsumer(BaseChatConsumer):
         await self._send_message(data, event=event['event'])
 
     async def event_group_list(self, event):
+        """Получение списка групп, в которых учавствует пользователь."""
         data = await self.group_list(self.scope['user'])
         await self._send_message(data, event=event['event'])
 
     async def event_user_list(self, event):
-        data = self.user_list(self.scope['user'])
+        """Получения списка пользователей"""
+        data = await self.user_list(self.scope['user'])
         await self._send_message(data, event=event['event'])
 
     @database_sync_to_async
     def group_create(self, name, user):
+        """Создание группы в базе данных."""
         group = ChatGroup(name=name)
         group.save()
         participant = GroupParticipant(user=user, group=group)
@@ -45,6 +47,7 @@ class GroupChatConsumer(BaseChatConsumer):
 
     @database_sync_to_async
     def group_list(self, user):
+        """Получение списка групп из базы данных."""
         group_ids = list(GroupParticipant.objects.filter(user=user).values_list('group', flat=True))
         result = []
         for group in ChatGroup.objects.filter(id__in=group_ids):
@@ -57,6 +60,7 @@ class GroupChatConsumer(BaseChatConsumer):
 
     @database_sync_to_async
     def user_list(self, user):
+        """Получение списка пользователей из базы данных."""
         users = User.objects.all().exclude(pk=user.id)
         result = []
         for user in users:
