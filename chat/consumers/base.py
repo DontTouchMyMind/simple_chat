@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 class BaseChatConsumer(AsyncJsonWebsocketConsumer):
     async def _send_message(self, data, event=None):
-        """Handler for send message."""
+        """Handler for send message to client."""
         await self.send_json(content={
             'status': 'ok',
             'data': data,
@@ -11,7 +11,7 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def _throw_error(self, data, event=None):
-        """Handler for throw error."""
+        """Handler for throw error to client."""
         await self.send_json(content={
             'status': 'error',
             'data': data,
@@ -29,17 +29,17 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         await self.accept()
-        if 'user' is not self.scope or self.scope['user'].is_anonymous:
+        if 'user' not in self.scope or self.scope['user'].is_anonymous:
             await self._send_message({'detail': 'Authorization failed!'})
             await self.close(code=1000)
             return
 
     async def receive_json(self, content, **kwargs):
-        message = await self.parse_content(content)
-        if message:
-            event = message['event'].replace('.', '_')
+        command_from_client = await self.parse_content(content)
+        if command_from_client:
+            event = command_from_client['event'].replace('.', '_')
             method = getattr(self, f'event_{event}', self.method_undefined)
-            await method(message)
+            await method(command_from_client)
         else:
             await self._throw_error({'detail': 'Invalid message!'})
 
@@ -57,5 +57,6 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
     @classmethod
     async def parse_content(cls, content):
         """The method checks if the message valid."""
-        if isinstance(content, dict) and isinstance(content.get('event'), str) and isinstance(content.get('data'), dict):
+        if isinstance(content, dict) and isinstance(content.get('event'), str) \
+                and isinstance(content.get('data'), dict):
             return content
