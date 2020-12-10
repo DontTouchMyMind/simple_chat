@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 class BaseChatConsumer(AsyncJsonWebsocketConsumer):
     async def _send_message(self, data, event=None):
-        """Handler for send message to client."""
+        """Обработчик отправки сообщеий клиенту."""
         await self.send_json(content={
             'status': 'ok',
             'data': data,
@@ -11,7 +11,7 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def _throw_error(self, data, event=None):
-        """Handler for throw error to client."""
+        """Обработчик отравки ошибки клиенту."""
         await self.send_json(content={
             'status': 'error',
             'data': data,
@@ -19,7 +19,7 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def _group_send(self, data, event=None):
-        """The function creates message that will be send to channel layer."""
+        """Обработчик создания сообщения группе."""
         data = {
             'type': 'response.proxy',
             'data': data,
@@ -44,19 +44,20 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
             await self._throw_error({'detail': 'Invalid message!'})
 
     async def disconnect(self, code):
-        pass
+        await self.channel_layer.group_discard(self.channel, self.channel_name)
+        await super().disconnect(code=code)
 
     async def method_undefined(self, message):
-        """The function sends to client error message 'Unknown message'."""
+        """Функция оправляет ошибку, если комманда не известна."""
         await self._throw_error({'detail': 'Unknown event'}, event=message['event'])
 
     async def response_proxy(self, event):
-        """Handler for send message to the channel layer."""
+        """Обработчик отправки сообщений в channel layers."""
         await self._send_message(data=event['data'], event=event.get('event'))
 
     @classmethod
     async def parse_content(cls, content):
-        """The method checks if the message valid."""
+        """Проверка валидности сообщения."""
         if isinstance(content, dict) and isinstance(content.get('event'), str) \
                 and isinstance(content.get('data'), dict):
             return content
