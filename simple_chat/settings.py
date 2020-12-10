@@ -71,7 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'simple_chat.wsgi.application'
 
-ASGI_APPLICATION = 'simple_chat.asgi.application'
+ASGI_APPLICATION = 'simple_chat.routing.application'
 
 
 # Database
