@@ -38,13 +38,6 @@ async def pytest_consumers():
     # Connection test.
     assert connected
 
-    # Group creation test.
-    await communicator.send_json_to({'event': 'group.create', 'data': {'name': 'Group 1'}})
-    result = await communicator.receive_json_from()
-    assert result['status'] == 'ok'
-    assert result['event'] == 'group.create'
-    assert result['data']['name'] == 'Group 1'
-
     # Test parse content.
     await communicator.send_json_to({'event': '', 'data': ''})  # 'data' is dict.
     result = await communicator.receive_json_from()
@@ -58,10 +51,25 @@ async def pytest_consumers():
     assert result['event'] == 'undefined.method'
     assert result['data']['detail'] == 'Unknown event'
 
+    # Group creation test.
+    await communicator.send_json_to({'event': 'group.create', 'data': {'name': 'Group 1'}})
+    result = await communicator.receive_json_from()
+    assert result['status'] == 'ok'
+    assert result['event'] == 'group.create'
+    assert result['data']['name'] == 'Group 1'
+
+    # Test group_list method.
     await communicator.send_json_to({'event': 'group.list', 'data': {}})
     result = await communicator.receive_json_from()
     assert result['status'] == 'ok'
     assert result['event'] == 'group.list'
     assert len(result['data']) == 1
+
+    # Test user list method.
+    await communicator.send_json_to({'event': 'user.list', 'data': {}})
+    result = await communicator.receive_json_from()
+    assert result['status'] == 'ok'
+    assert result['event'] == 'user.list'
+    assert len(result['data']) == 0 # Т.к. исключается пользователь, создавший запрос.
 
     await communicator.disconnect()
