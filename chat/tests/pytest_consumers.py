@@ -70,6 +70,6 @@ async def pytest_consumers():
     result = await communicator.receive_json_from()
     assert result['status'] == 'ok'
     assert result['event'] == 'user.list'
-    assert len(result['data']) == 0 # Т.к. исключается пользователь, создавший запрос.
+    assert len(result['data']) == 0     # Without new_user!
 
     await communicator.disconnect()
