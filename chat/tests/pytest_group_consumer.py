@@ -57,6 +57,7 @@ async def pytest_consumers():
     assert result['status'] == 'ok'
     assert result['event'] == 'group.create'
     assert result['data']['name'] == 'Group 1'
+    group_url = result['data']['link']
 
     # Test group_list method.
     await communicator.send_json_to({'event': 'group.list', 'data': {}})
@@ -73,3 +74,4 @@ async def pytest_consumers():
     assert len(result['data']) == 0     # Without new_user!
 
     await communicator.disconnect()
+
