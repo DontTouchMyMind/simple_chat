@@ -3,4 +3,4 @@ from django.shortcuts import render
 
 
 def index(request):
-    return HttpResponse('Its index page for testing urlpatterns')
+    return render(request, 'index.html')
