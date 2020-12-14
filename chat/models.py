@@ -13,7 +13,7 @@ class User(AbstractUser):
 
 
 class ChatGroup(models.Model):
-    """Модель группы"""
+    """Модель группы."""
     name = models.CharField(max_length=255, default='')
 
     @property
@@ -43,7 +43,7 @@ class GroupParticipant(models.Model):
 
 
 class ChatMessage(models.Model):
-    """Модель сообщения, которая хранит данные о том, кто создатель сообщения в какую группу оно отправлено."""
+    """Модель сообщения, которая хранит данные о том, кто создатель сообщения и в какую группу оно отправлено."""
     user = models.ForeignKey(User, related_name='user_message', on_delete=models.CASCADE, null=True)
     group = models.ForeignKey(ChatGroup, related_name='group_message', on_delete=models.CASCADE, null=True)
     message = models.TextField(default='')
