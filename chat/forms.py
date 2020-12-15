@@ -22,7 +22,7 @@ class SignUpForm(forms.Form):
 
     username = forms.CharField(max_length=30, min_length=4)
     email = forms.EmailField()
-    password = forms.CharField(min_length=20, min_length=8, widget=forms.PasswordInput())
+    password = forms.CharField(max_length=20, min_length=8, widget=forms.PasswordInput())
 
     def clean(self):
         cleaned_data = super().clean()
@@ -50,7 +50,7 @@ class LoginForm(forms.Form):
         })
 
     username = forms.CharField(max_length=30, min_length=4)
-    password = forms.CharField(min_length=20, min_length=8, widget=forms.PasswordInput())
+    password = forms.CharField(max_length=20, min_length=8, widget=forms.PasswordInput())
 
     def clean(self):
         cleaned_data = super().clean()
