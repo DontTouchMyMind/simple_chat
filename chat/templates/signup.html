@@ -1,6 +1,6 @@
 {% extends 'login_base.html' %}
 {% block title %}
-Log In
+Registration
 {% endblock %}
 {% block form %}
 <form method="post">
@@ -13,8 +13,9 @@ Log In
     <fieldset class="clearfix">
         <p><span class="fontawesome-user"></span>{{ form.username }}</p>
         <p><span class="fontawesome-lock"></span>{{ form.password }}</p>
-        <p><input type="submit" value="LOGIN"></p>
+        <p><span class="fontawesome-envelope"></span>{{ form.email }}</p>
+        <p><input type="submit" value="Register"></p>
     </fieldset>
 </form>
-<p>Don't have account ? &nbsp;&nbsp;<a href="/signup/">Sign Up Here</a><span class="fontawesome-arrow-right"></span></p>
+<p>Already have account ? &nbsp;&nbsp;<a href="/login">Sign in</a><span class="fontawesome-arrow-right"></span></p>
 {% endblock %}

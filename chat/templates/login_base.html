@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+    <div id="login">
+        {% block form %}
+            <p><span class="fontawesome-user"></span><input type="text" value="Username" placeholder="User name"></p>
+            <p><span class="fontawesome-lock"></span><input type="password" value="Password" placeholder="Password"></p>
+            <p><span class="fontawesome-envelope"></span><input type="text" value="Email" placeholder="Email"></p>
+        {% endblock %}
+    </div>
+</body>
+</html>

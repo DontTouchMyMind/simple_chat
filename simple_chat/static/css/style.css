@@ -1,138 +1,118 @@
-*{
-    margin: 0px;
-    padding: 0px;;
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://weloveiconfonts.com/api/?family=fontawesome);
+
+@import url(http://meyerweb.com/eric/tools/css/reset/reset.css);
+
+/* ---------- FONTAWESOME ---------- */
+
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
 }
 
-body{
-    font-family: Arial, Helvetica, sans-serif;
+/* ---------- GENERAL ---------- */
+
+body {
+	background-color: #2c3338;
+	color: #606468;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.5em;
 }
 
-.container
-{
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    background-color: red;
-    background: linear-gradient(to bottom, rgb(6, 108, 224),  rgb(14, 48, 122));
-    width: 800px;
-    height: 400px;
-    margin: 10% auto;;
-    border-radius: 5px;
+a {
+	color: #eee;
+	text-decoration: none;
 }
 
-.content-holder
-{
-    text-align: center;
-    color: white;
-    font-size: 14px;
-    font-weight: lighter;
-    letter-spacing: 2px;
-    margin-top: 15%;
-    padding: 50px;
+a:hover {
+	text-decoration: underline;
 }
 
-.content-holder h2
-{
-    font-size: 34px;
-    margin: 20px auto;
-}
-
-.content-holder p
-{
-    margin: 30px auto;
-}
-
-.content-holder button
-{
-    border:none;
-    font-size: 15px;
-    padding: 10px;
-    border-radius: 6px;
-    background-color: white;
-    width: 150px;
-    margin: 20px auto;
-}
-
-
-.box-2{
-    background-color: white;
-
-    margin: 5px;
-}
-
-.login-form-container
-{
-    text-align: center;
-    margin-top: 10%;
+input {
+	border: none;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.5em;
+	padding: 0;
+	-webkit-appearance: none;
 
 }
 
-.login-form-container h1
-{
-    color: black;
-    font-size: 24px;
-    padding: 20px;
+p {
+	line-height: 1.5em;
 }
 
-.input-field
-{
-    box-sizing: border-box;
-    font-size: 14px;
-    padding: 10px;
-    border-radius: 7px;
-    border: 1px solid rgb(168, 168, 168);
-    width: 250px;
-    outline: none;
+.clearfix { *zoom: 1; } /* For IE 6/7 */
+.clearfix:before, .clearfix:after {
+	display: table;
+	content: "";
+}
+.clearfix:after { clear: both; }
+
+/* ---------- LOGIN ---------- */
+
+#login {
+	margin: 150px auto;
+	width: 280px;
 }
 
-.login-button{
-    box-sizing: border-box;
-    color: white;
-    font-size: 14px;
-    padding: 13px;
-    border-radius: 7px;
-    border: none;
-    width: 250px;
-    outline: none;
-    background-color: rgb(56, 102, 189);
+#login form span {
+	background-color: #363b41;
+	border-radius: 3px 0px 0px 3px;
+	-moz-border-radius: 3px 0px 0px 3px;
+	-webkit-border-radius: 3px 0px 0px 3px;
+	color: #606468;
+	display: block;
+	float: left;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	width: 50px;
 }
 
-
-
-.button-2
-{
-    display: none;
+#login form input {
+	height: 50px;
+	outline:none;
 }
 
-
-
-
-
-.signup-form-container
-{
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-60%);
-    text-align: center;
-    display: none;
+#login form input[type="text"], input[type="password"], input[type="email"] {
+	background-color: #3b4148;
+	border-radius: 0px 3px 3px 0px;
+	-moz-border-radius: 0px 3px 3px 0px;
+	-webkit-border-radius: 0px 3px 3px 0px;
+	color: #606468;
+	margin-bottom: 1em;
+	padding: 0 16px;
+	width: 198px;
 }
 
-
-.signup-form-container h1
-{
-    color: black;
-    font-size: 24px;
-    padding: 20px;
+#login form input:focus {
+	color:#fff;
 }
 
-.signup-button{
-    box-sizing: border-box;
-    color: white;
-    font-size: 14px;
-    padding: 13px;
-    border-radius: 7px;
-    border: none;
-    width: 250px;
-    outline: none;
-    background-color: rgb(56, 189, 149);
+#login form input[type="submit"] {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background-color: #ea4c88;
+	color: #eee;
+	font-weight: bold;
+	margin-bottom: 2em;
+	text-transform: uppercase;
+	cursor:pointer;
+	width: 280px;
+}
+
+#login form input[type="submit"]:hover {
+	background-color: #d44179;
+}
+
+#login > p {
+	text-align: center;
+}
+
+#login > p span {
+	padding-left: 5px;
 }
