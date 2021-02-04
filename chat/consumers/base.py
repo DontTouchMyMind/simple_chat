@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 class BaseChatConsumer(AsyncJsonWebsocketConsumer):
     async def _send_message(self, data, event=None):
-        """Обработчик отправки сообщеий клиенту."""
+        """Обработчик отправки сообщений клиенту."""
         await self.send_json(content={
             'status': 'ok',
             'data': data,
@@ -11,7 +11,7 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def _throw_error(self, data, event=None):
-        """Обработчик отравки ошибки клиенту."""
+        """Обработчик отправки ошибки клиенту."""
         await self.send_json(content={
             'status': 'error',
             'data': data,
@@ -19,7 +19,7 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         })
 
     async def _group_send(self, data, event=None):
-        """Обработчик создания сообщения группе."""
+        """Обработчик создания и отправки сообщения в channel layers(в redis)."""
         data = {
             'type': 'response.proxy',
             'data': data,
@@ -28,6 +28,7 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_send(self.channel, data)
 
     async def connect(self):
+        """Метод установки соединения."""
         await self.accept()
         if 'user' not in self.scope or self.scope['user'].is_anonymous:
             await self._send_message({'detail': 'Authorization failed!'})
@@ -35,11 +36,16 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
             return
 
     async def receive_json(self, content, **kwargs):
-        command_from_client = await self.parse_content(content)
-        if command_from_client:
-            event = command_from_client['event'].replace('.', '_')
+        """
+        Обработчик сообщений от клиента.
+        При получение сообщения от клиента определяет, какой эвент должен обрабатывать сообщение.
+        И вызывает соответствующий метод в консьюмере.
+        """
+        message = await self.parse_content(content)
+        if message:
+            event = message['event'].replace('.', '_')
             method = getattr(self, f'event_{event}', self.method_undefined)
-            await method(command_from_client)
+            await method(message)
         else:
             await self._throw_error({'detail': 'Invalid message!'})
 
@@ -48,16 +54,16 @@ class BaseChatConsumer(AsyncJsonWebsocketConsumer):
         await super().disconnect(code=code)
 
     async def method_undefined(self, message):
-        """Функция оправляет ошибку, если комманда не известна."""
+        """Функция оправляет ошибку, если команда не известна."""
         await self._throw_error({'detail': 'Unknown event'}, event=message['event'])
 
     async def response_proxy(self, event):
-        """Обработчик отправки сообщений в channel layers."""
+        """Обработчик отправки сообщения всем пользователям, кот. подключены к группе."""
         await self._send_message(data=event['data'], event=event.get('event'))
 
     @classmethod
     async def parse_content(cls, content):
         """Проверка валидности сообщения."""
-        if isinstance(content, dict) and isinstance(content.get('event'), str) \
-                and isinstance(content.get('data'), dict):
+        if isinstance(content, dict) and isinstance(content.get('event'), str) and\
+                isinstance(content.get('data'), dict):
             return content
