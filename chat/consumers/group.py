@@ -23,7 +23,7 @@ class GroupChatConsumer(BaseChatConsumer):
         await self._send_message(data, event=event['event'])
 
     async def event_group_list(self, event):
-        """Получение списка групп, в которых учавствует пользователь."""
+        """Получение списка групп, в которых участвует пользователь."""
         data = await self.group_list(self.scope['user'])
         await self._send_message(data, event=event['event'])
 
@@ -34,7 +34,7 @@ class GroupChatConsumer(BaseChatConsumer):
 
     @database_sync_to_async
     def group_create(self, name, user):
-        """Создание группы в базе данных."""
+        """Создание объекта группы в базе данных."""
         group = ChatGroup(name=name)
         group.save()
         participant = GroupParticipant(user=user, group=group)

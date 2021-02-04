@@ -19,7 +19,8 @@ class ChatGroup(models.Model):
     @property
     def link(self):
         channel_name = self.channel_name(self.id)
-        return f'/ws/chat/{self.id}'
+        # return f'/ws/chat/{self.id}'
+        return f'/ws/chat/{channel_name}/'
 
     def __str__(self):
         return self.name
@@ -43,7 +44,9 @@ class GroupParticipant(models.Model):
 
 
 class ChatMessage(models.Model):
-    """Модель сообщения, которая хранит данные о том, кто создатель сообщения и в какую группу оно отправлено."""
+    """
+    Модель сообщения, которая хранит текст сообщения,
+    данные о том, кто создатель сообщения и в какую группу оно отправлено."""
     user = models.ForeignKey(User, related_name='user_message', on_delete=models.CASCADE, null=True)
     group = models.ForeignKey(ChatGroup, related_name='group_message', on_delete=models.CASCADE, null=True)
     message = models.TextField(default='')
