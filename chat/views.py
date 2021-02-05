@@ -4,11 +4,30 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from .forms import SignupForm, LoginForm
+from .models import User
 
 
 @login_required(login_url='/login/')
 def index(request):
-    return render(request, 'index.html')
+    user_list = User.objects.all()
+
+    context = {
+        'title': 'ListUser',
+        'users_list': user_list,
+        'username': request.user.username,
+    }
+    return render(request, 'home.html', context)
+
+
+def room(request, group_id):
+    users_list = User.objects.all()
+    context = {
+        'group_id': group_id,
+        'title': 'ListUser',
+        'users_list': users_list,
+        'username': request.user.username,
+    }
+    return render(request, 'test_room.html', context)
 
 
 def logout_user(request):
