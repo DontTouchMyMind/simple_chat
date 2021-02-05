@@ -23,7 +23,7 @@
         <div class="wrap">
           <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
           <p>{{ user }}</p>
-          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <a href="/logout" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
           <div id="status-options">
             <ul>
               <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
@@ -43,54 +43,77 @@
     </div>
     <div class="content">
       <div class="contact-profile">
-          <p>WELCOME TO THE CHAT BOX</p>
+          {% block header %}
+            <p>WELCOME TO THE CHAT BOX</p>
+          {% endblock header%}
       </div>
-      <div class="rooms">
-          <div class="container">
-              <p>Create a room or connect</p>
-              <br>
-              <br>
-              <input id="room-name-input" type="text" placeholder="Enter the name of the room..." />
-              <button id="room-name-submit"><span>Create</span></button>
-              <br>
-              <br>
-              <ul>
-                  <li>
-                      Room1
-                      <button>Connect</button>
-                  </li>
-                  <li>
-                      Room2
-                      <button>Connect</button>
-                  </li>
-                  <li>
-                      Room3
-                      <button>Connect</button>
-                  </li>
-              </ul>
-              {% for user in users_list %}
-                <p>{{ user.username }}</p>
-            {% endfor %}
+        {% block content %}
+          <div class="rooms">
+              <div class="container">
+                  <p>Create a room or connect</p>
+                  {% if request.user.is_authenticated and request.user.first_name %} Hello, <p>{{ username }}<p>
+                  {% else %}
+                  {% endif %}
+                  <br>
+                  <br>
+                  <input id="room-name-input" type="text" placeholder="Enter the name of the room..." />
+                  <button id="room-name-submit"><span>Create</span></button>
+                  <br>
+                  <br>
+                  <div class="messages"></div>
+                  <button onclick="on_send()" id="send" class="btn btn-primary">Send</button>
+                  <textarea id="chat-log" cols="50" rows="2"></textarea><br>
+              </div>
           </div>
-      </div>
+        {% endblock %}
     </div>
   </div>
 
 <script src="{% static 'js/main.js' %}"></script>
-<script>
-    document.querySelector('#room-name-input').focus();
-    document.querySelector('#room-name-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#room-name-submit').click();
+  {% block js %}
+    <script>
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+    </script>
+  <script>
+      const  chatSocket = new WebSocket(
+          'ws://'
+          + window.location.host
+          + '/ws/groups/'
+      );
+      window.onload = function () {
+          chatSocket.send(JSON.stringify({
+          'event': 'user.list',
+          'data': {}
+        }));
+      };
+
+      chatSocket.onmessage = function(e) {
+          const data = JSON.parse(e.data);
+          var users_list = data.data
+          console.log(data)
+          console.log(users_list)
+          // $('.messages').append(users_list);
+          // $('.messages').append("<br>");
+          // $('.messages').append("END2");
+          for (var i=0; i<=users_list.length-1; i++) {
+              $('.messages').append(users_list[i]['username'] +'<br>');
+              console.log(users_list[i]['username']);
+
         }
-    };
-
-    document.querySelector('#room-name-submit').onclick = function(e) {
-        var roomName = document.querySelector('#room-name-input').value;
-        window.location.pathname = '/chat/' + roomName + '/';
-    };
-
-</script>
+      }
+  </script>
+{% endblock js %}
 </body>
 
 </html>
