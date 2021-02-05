@@ -36,7 +36,7 @@ class ChatConsumer(BaseChatConsumer):
         participants = await self.get_participants()
         return await self._send_message(participants, event=event['event'])
 
-    async def event_send_message_to_group(self, event):
+    async def event_send_message(self, event):
         """Обработчик отправки сообщения в группу."""
         message = event['data'].get('message')
         if not message:
@@ -75,6 +75,8 @@ class ChatConsumer(BaseChatConsumer):
         user = User.objects.filter(pk=user_id).first()
         if user:
             participant, _ = GroupParticipant.objects.get_or_create(group=self.group, user=user)
+        # participant = self.get_participants()
+        # return participant
 
     @database_sync_to_async
     def save_message(self, message, user):
