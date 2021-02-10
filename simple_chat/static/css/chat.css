@@ -565,7 +565,7 @@ body {
 #frame .content .contact-profile .social-media i:hover {
   color: #435f7a;
 }
-#frame .content .messages {
+#frame .content .created_rooms {
   height: auto;
   min-height: calc(100% - 93px);
   max-height: calc(100% - 93px);
@@ -574,18 +574,18 @@ body {
   width: 100%;
 }
 @media screen and (max-width: 735px) {
-  #frame .content .messages {
+  #frame .content .created_rooms {
     max-height: calc(100% - 105px);
   }
 }
-#frame .content .messages::-webkit-scrollbar {
+#frame .content .created_rooms::-webkit-scrollbar {
   width: 8px;
   background: transparent;
 }
-#frame .content .messages::-webkit-scrollbar-thumb {
+#frame .content .created_rooms::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3);
 }
-#frame .content .messages ul li {
+#frame .content .created_rooms ul li {
   display: inline-block;
   clear: both;
   float: left;
@@ -593,30 +593,30 @@ body {
   width: calc(100% - 25px);
   font-size: 0.9em;
 }
-#frame .content .messages ul li:nth-last-child(1) {
+#frame .content .created_rooms ul li:nth-last-child(1) {
   margin-bottom: 20px;
 }
-#frame .content .messages ul li.sent img {
+#frame .content .created_rooms ul li.sent img {
   margin: 6px 8px 0 0;
 }
-#frame .content .messages ul li.sent p {
+#frame .content .created_rooms ul li.sent p {
   background: #435f7a;
   color: #f5f5f5;
 }
-#frame .content .messages ul li.replies img {
+#frame .content .created_rooms ul li.replies img {
   float: right;
   margin: 6px 0 0 8px;
 }
-#frame .content .messages ul li.replies p {
+#frame .content .created_rooms ul li.replies p {
   background: #f5f5f5;
   float: right;
 }
-#frame .content .messages ul li img {
+#frame .content .created_rooms ul li img {
   width: 42px;
   border-radius: 50%;
   float: left;
 }
-#frame .content .messages ul li p {
+#frame .content .created_rooms ul li p {
   display: inline-block;
   padding: 10px 15px;
   border-radius: 20px;
@@ -625,7 +625,7 @@ body {
   font-size: 18px;
 }
 @media screen and (min-width: 735px) {
-  #frame .content .messages ul li p {
+  #frame .content .created_rooms ul li p {
     max-width: 300px;
   }
 }
