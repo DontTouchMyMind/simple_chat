@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+    <script src="https://use.typekit.net/hoy3lrg.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
+  </head>
+
+<body>
+  <div id="frame">
+    <div id="sidepanel">
+      <div id="profile">
+        <div class="wrap">
+          <img id="profile-img" src="{% static 'image/computer-user_1.png' %}" class="online" alt="" />
+          <p>{{ username }}</p>
+          <a href="/logout" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+          <div id="status-options">
+            <ul>
+              <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+              <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+              <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+              <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="search">
+        <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+        <input type="text" placeholder="Search contacts..." />
+      </div>
+      <div id="contacts">
+          <ul>
+            <li class="contact">
+              <div class="wrap">
+              <img src="{% static 'image/user_1.png' %}"/>
+              <div class="meta">
+                <table style="width: 75%">
+                  <tr>
+                    <th>
+                      <p class="name">{{ user.username }}</p>
+                    </th>
+                    <th>
+                        <a id="{{user.username}}" class="add_user_button"><i style="float: right" class="fa fa-user-plus fa-fw" aria-hidden="true"></i></a>
+                    </th>
+                  </tr>
+                </table>
+              </div>
+              </div>
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="content">
+      <div class="contact-profile">
+        <p class="group_name">GROUP_NAME</p>
+        <p class="user_list_in_group">user_list_for_group</p>
+      </div>
+      <div class="messages">
+			<ul>
+				<li class="sent">
+                    <p>You:</p>
+					<p class="text_message">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
+				</li>
+				<li class="replies">
+                    <p style="float: right">Username:</p>
+					<p class="text_message">When you're backed against the wall, break the god damn thing down.</p>
+				</li>
+				<li class="replies">
+					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+					<p>Excuses don't win championships.</p>
+				</li>
+				<li class="sent">
+					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+					<p>Oh yeah, did Michael Jordan tell you that?</p>
+				</li>
+				<li class="replies">
+					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+					<p>No, I told him that.</p>
+				</li>
+				<li class="replies">
+					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+					<p>What are your choices when someone puts a gun to your head?</p>
+				</li>
+				<li class="sent">
+					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+					<p>What are you talking about? You do what they say or they shoot you.</p>
+				</li>
+				<li class="replies">
+					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+					<p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
+				</li>
+			</ul>
+      </div>
+      <div class="message-input">
+        <div class="wrap">
+        <input id="chat-message-input" type="text" placeholder="Write your message..." />
+        <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+        <button id="chat-message-submit" class="submit">
+          <i class="fa fa-paper-plane" aria-hidden="true"></i>
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{ username|json_script:"username" }}
+<script src="{% static 'js/main.js' %}"></script>
+
+<script>
+    const userName = JSON.parse(document.getElementById('username').textContent);
+    const  chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws'
+        + window.location.pathname
+    );
+
+    window.onload = function () {
+      chatSocket.send(JSON.stringify({
+      'event': 'list.messages',
+      'data': {}
+        }));
+    };
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        if (data['status'] === 'ok') {
+            console.log(data)
+        } else {
+            console.log('Error')
+        }
+    };
+
+    console.log(userName);
+    // for (var i=0; i<=u_l.length-1; i++) {
+    //     var user_name = u_l['User']
+    //     console.log(user_name)
+    // }
+    // function add_user() {
+    //     const data =
+    //     chatSocket.send(JSON.stringify(data))
+    // }
+</script>
+</body>
+</html>
