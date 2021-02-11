@@ -100,6 +100,10 @@
         }));
       };
 
+      chatSocket.onclose = function (e) {
+          console.error('Chat socket closed unexpectedly')
+      };
+
       chatSocket.onmessage = function(e) {
           const data = JSON.parse(e.data);
           console.log(data);
