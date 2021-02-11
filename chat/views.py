@@ -24,10 +24,10 @@ def room(request, group_id):
     context = {
         'group_id': group_id,
         'title': 'ListUser',
-        'users_list': users_list,
+        'users_list': users_list[1:],
         'username': request.user.username,
     }
-    return render(request, 'test_room.html', context)
+    return render(request, 'room.html', context)
 
 
 def logout_user(request):
