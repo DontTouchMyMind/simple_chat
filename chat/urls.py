@@ -7,5 +7,5 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('logout/', logout_user),
     path('signup/', SignupView.as_view()),
-    path('chat/<str:group_id>/', room, name='test_room')
+    path('chat/<str:group_id>/', room, name='room')
 ]
