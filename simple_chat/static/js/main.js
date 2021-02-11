@@ -1,3 +1,4 @@
+$(".created_rooms").animate({ scrollTop: $(document).height() }, "fast");
 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
 $("#profile-img").click(function() {
