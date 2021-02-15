@@ -4,17 +4,19 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from .forms import SignupForm, LoginForm
-from .models import User
+from .models import User, ChatGroup
 
 
 @login_required(login_url='/login/')
 def index(request):
     user_list = User.objects.all()
+    new_group_id = ChatGroup.objects.order_by('-id')[:1][0]
 
     context = {
         'title': 'ListUser',
         'users_list': user_list,
         'username': request.user.username,
+        'new_group_id': new_group_id.id + 1,
     }
     return render(request, 'home.html', context)
 
