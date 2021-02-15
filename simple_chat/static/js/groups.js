@@ -1,3 +1,4 @@
+const newGroupId = JSON.parse(document.getElementById('new_group_id').textContent);
 const  chatSocket = new WebSocket(
           'ws://'
           + window.location.host
@@ -28,7 +29,6 @@ chatSocket.onmessage = function(e) {
     for (var i=0; i<=group_list.length-1; i++) {
         var group_name = group_list[i]['name'];
         var $link = '/chat/' + group_list[i]['id'] + '/';
-
         $('#created_rooms_display').append(
             '<tr>' +
             '<th>' + group_name + '</th>' +
@@ -48,5 +48,12 @@ document.querySelector('#room-name-input').onkeyup = function(e) {
 document.querySelector('#room-name-submit').onclick = function(e) {
     var roomName = document.querySelector('#room-name-input').value;
 
-    window.location.pathname = '/chat/' + roomName + '/';
+    chatSocket.send(JSON.stringify({
+        'event': 'group.create',
+        'data': {
+            'name': roomName
+        }
+    }));
+
+    window.location.pathname = '/chat/' + newGroupId + '/';
 };
