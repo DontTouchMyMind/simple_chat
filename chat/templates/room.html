@@ -64,7 +64,7 @@
     </div>
     <div class="content">
       <div class="contact-profile">
-        <p class="group_name">GROUP_NAME</p>
+        <p class="group_name">{{ group_name }}</p>
         <p class="user_list_in_group">user_list_for_group</p>
       </div>
       <div class="messages">
@@ -116,7 +116,7 @@
   </div>
   {{ username|json_script:"username" }}
 <script src="{% static 'js/main.js' %}"></script>
-
+{% block js %}
 <script>
     const userName = JSON.parse(document.getElementById('username').textContent);
     const  chatSocket = new WebSocket(
@@ -152,5 +152,6 @@
     //     chatSocket.send(JSON.stringify(data))
     // }
 </script>
+{% endblock js %}
 </body>
 </html>

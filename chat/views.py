@@ -23,8 +23,10 @@ def index(request):
 
 def room(request, group_id):
     users_list = User.objects.all()
+    group_name = ChatGroup.objects.filter(pk=group_id).first()
     context = {
         'group_id': group_id,
+        'group_name': group_name,
         'title': 'ListUser',
         'users_list': users_list[1:],
         'username': request.user.username,
