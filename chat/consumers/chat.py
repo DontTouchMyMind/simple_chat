@@ -93,6 +93,7 @@ class ChatConsumer(BaseChatConsumer):
             result.append({
                 'id': message.id,
                 'username': message.user.username,
-                'message': message.message
+                'message': message.message,
+                'timestamp': message.timestamp,
             })
         return result

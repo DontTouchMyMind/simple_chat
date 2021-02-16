@@ -50,15 +50,15 @@ class ChatMessage(models.Model):
     user = models.ForeignKey(User, related_name='user_message', on_delete=models.CASCADE, null=True)
     group = models.ForeignKey(ChatGroup, related_name='group_message', on_delete=models.CASCADE, null=True)
     message = models.TextField(default='')
-    # timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.message
 
-    # class Meta:
-    #     verbose_name = 'Message'
-    #     verbose_name_plural = 'Messages'
-    #
-    # @staticmethod
-    # def last_10_messages():
-    #     return ChatMessage.objects.order_by('-timestamp').all()[:10:-1]
+    class Meta:
+        verbose_name = 'Message'
+        verbose_name_plural = 'Messages'
+
+    @staticmethod
+    def last_10_messages():
+        return ChatMessage.objects.order_by('-timestamp').all()[:10:-1]
