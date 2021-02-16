@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from .forms import SignupForm, LoginForm
-from .models import User, ChatGroup
+from .models import User, ChatGroup, GroupParticipant
 
 
 @login_required(login_url='/login/')
@@ -24,9 +24,13 @@ def index(request):
 def room(request, group_id):
     users_list = User.objects.all()
     group_name = ChatGroup.objects.filter(pk=group_id).first()
+    group_users_id = list(GroupParticipant.objects.filter(group=group_id).values_list('user', flat=True))
+    group_users_name = [user.username for user in users_list if user.id in group_users_id]
+
     context = {
         'group_id': group_id,
         'group_name': group_name,
+        'group_users': group_users_name,
         'title': 'ListUser',
         'users_list': users_list[1:],
         'username': request.user.username,

@@ -65,7 +65,7 @@
     <div class="content">
       <div class="contact-profile">
         <p class="group_name">{{ group_name }}</p>
-        <p class="user_list_in_group">user_list_for_group</p>
+        <p class="user_list_in_group">{% for user in group_users %}{{ user }}&nbsp;{% endfor %}</p>
       </div>
       <div class="messages">
 			<ul>
