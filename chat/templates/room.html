@@ -50,8 +50,8 @@
                     <th>
                       <p class="name">{{ user.username }}</p>
                     </th>
-                    <th>
-                        <a id="{{user.username}}" class="add_user_button"><i style="float: right" class="fa fa-user-plus fa-fw" aria-hidden="true"></i></a>
+                    <th id="{{user.username}}">
+                        <a id="{{user.id}}" class="add_user_button"><i style="float: right" class="fa fa-user-plus fa-fw" aria-hidden="true"></i></a>
                     </th>
                   </tr>
                 </table>
@@ -65,7 +65,7 @@
     <div class="content">
       <div class="contact-profile">
         <p class="group_name">{{ group_name }}</p>
-        <p class="user_list_in_group">{% for user in group_users %}{{ user }}&nbsp;{% endfor %}</p>
+        <p class="user_list_in_group" id="participants">{% for user in group_users %}{{ user }}&nbsp;{% endfor %}</p>
       </div>
       <div class="messages">
 			<ul>
@@ -119,6 +119,8 @@
 {% block js %}
 <script>
     const userName = JSON.parse(document.getElementById('username').textContent);
+    var elParticipants = document.getElementById('participants');
+    var listParticipants = elParticipants.textContent;
     const  chatSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -142,15 +144,23 @@
         }
     };
 
-    console.log(userName);
-    // for (var i=0; i<=u_l.length-1; i++) {
-    //     var user_name = u_l['User']
-    //     console.log(user_name)
-    // }
-    // function add_user() {
-    //     const data =
-    //     chatSocket.send(JSON.stringify(data))
-    // }
+    function addUserToGroup() {
+        console.log(this.parentNode.id);
+        listParticipants += this.parentNode.id;
+        chatSocket.send(JSON.stringify({
+            'event': 'add.participant',
+            'data': {
+                'user_id': this.id
+            }
+        }))
+        elParticipants.textContent = listParticipants;
+    };
+
+    var elAddUserButton = document.getElementsByClassName('add_user_button');
+    [].forEach.call(elAddUserButton, function (el) {
+        el.addEventListener('click', addUserToGroup, false)
+    });
+
 </script>
 {% endblock js %}
 </body>
