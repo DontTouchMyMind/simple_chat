@@ -94,6 +94,5 @@ class ChatConsumer(BaseChatConsumer):
                 'id': message.id,
                 'username': message.user.username,
                 'message': message.message,
-                'timestamp': message.timestamp,
             })
         return result
