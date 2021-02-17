@@ -23,7 +23,7 @@
         <div class="wrap">
           <img id="profile-img" src="{% static 'image/computer-user_1.png' %}" class="online" alt="" />
           <p>{{ username }}</p>
-          <a href="/logout" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+          <a href="javascript:history.back()" class="logout"><i class="fa fa-reply" aria-hidden="true" title="Return to the home page"></i></a>
           <div id="status-options">
             <ul>
               <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
@@ -33,10 +33,6 @@
             </ul>
           </div>
         </div>
-      </div>
-      <div id="search">
-        <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-        <input type="text" placeholder="Search contacts..." />
       </div>
       <div id="contacts">
           {% for user in users_list %}
@@ -68,16 +64,7 @@
         <p class="user_list_in_group" id="participants">{% for user in group_users %}{{ user }}&nbsp;{% endfor %}</p>
       </div>
       <div class="messages">
-			<ul id="chat-log">
-				<li class="sent">
-                    <p>You:</p>
-					<p class="text_message">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-				</li>
-				<li class="replies">
-                    <p style="float: right">Username:</p>
-					<p class="text_message">When you're backed against the wall, break the god damn thing down.</p>
-				</li>
-			</ul>
+			<ul id="chat-log"></ul>
       </div>
       <div class="message-input">
         <div class="wrap">
