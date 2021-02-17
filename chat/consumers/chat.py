@@ -53,6 +53,11 @@ class ChatConsumer(BaseChatConsumer):
         messages = await self.get_messages()
         return await self._send_message(messages, event=event['event'])
 
+    async def event_fetch_messages(self, event):
+        """Обработчик, который выводит последние 10 сообщений группы пользователю."""
+        messages = await self.get_last_messages()
+        return await self._send_message(messages, event=event['event'])
+
     @database_sync_to_async
     def get_group(self):
         """ Получаем группу, к которой присоединяется пользователь.
@@ -88,6 +93,19 @@ class ChatConsumer(BaseChatConsumer):
     def get_messages(self):
         """Получаем все сообщения группы."""
         messages = ChatMessage.objects.select_related('user').filter(group=self.group).order_by('id')
+        result = []
+        for message in messages:
+            result.append({
+                'id': message.id,
+                'username': message.user.username,
+                'message': message.message,
+            })
+        return result
+
+    @database_sync_to_async
+    def get_last_messages(self):
+        """Получаем последние 10 сообщений группы."""
+        messages = ChatMessage.objects.select_related('user').filter(group=self.group).order_by('-id')[:10:-1]
         result = []
         for message in messages:
             result.append({

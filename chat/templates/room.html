@@ -51,7 +51,7 @@
                       <p class="name">{{ user.username }}</p>
                     </th>
                     <th id="{{user.username}}">
-                        <a id="{{user.id}}" class="add_user_button"><i style="float: right" class="fa fa-user-plus fa-fw" aria-hidden="true"></i></a>
+                        <a id="{{user.id}}" class="add_user_button"><i style="float: right" class="fa fa-user-plus fa-fw" aria-hidden="true" title="Add user to the chat room"></i></a>
                     </th>
                   </tr>
                 </table>
@@ -82,7 +82,7 @@
       <div class="message-input">
         <div class="wrap">
         <input id="chat-message-input" type="text" placeholder="Write your message..." />
-        <i class="fa fa-history attachment" aria-hidden="true" title="View history"></i>
+        <i id="view-history" class="fa fa-history attachment" aria-hidden="true" title="View history"></i>
         <button id="chat-message-submit" class="submit">
           <i class="fa fa-paper-plane" aria-hidden="true" title="Send message"></i>
         </button>
@@ -104,12 +104,33 @@
         + window.location.pathname
     );
 
-    // window.onload = function () {
-    //   chatSocket.send(JSON.stringify({
-    //   'event': 'list.messages',
-    //   'data': {}
-    //     }));
-    // };
+    chatSocket.onopen = function () {
+        chatSocket.send(JSON.stringify({
+        'event': 'fetch.messages',
+        'data': {}
+          }));
+    };
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        if (data['status'] === 'ok' && data['event'] === 'send.message') {
+            console.log(data['data']);
+            createMessage(data['data']);
+        }
+        else if (data['status'] === 'ok' && (data['event'] === 'fetch.messages' || data['event'] === 'list.messages')) {
+            var containerParent = document.getElementById('chat-log');
+            while (containerParent.firstChild) {
+                containerParent.firstChild.remove();
+            }
+            for (let i=0; i<data['data'].length; i++) {
+              createMessage(data['data'][i]);
+            }
+        }
+        else {
+            console.log('Error messages');
+        }
+    };
+
 
     document.querySelector('#chat-message-input').onkeyup = function(e) {
         if (e.keyCode === 13) {  // enter, return
@@ -130,18 +151,12 @@
         messageInputDom.value = '';
     };
 
-    chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        if (data['status'] === 'ok' && data['event'] === 'send.message') {
-            console.log(data['data']);
-            createMessage(data['data']);
-        } else if (data['status'] === 'ok' && data['event'] === 'list.messages') {
-            console.log(data['event']);
-        }
-        else {
-            console.log('Error messages');
-        }
-    };
+    document.querySelector('#view-history').onclick = function (e) {
+        chatSocket.send(JSON.stringify({
+            'event': 'list.messages',
+            'data': {}
+        }));
+    }
 
     function addUserToGroup() {
         console.log(this.parentNode.id);
