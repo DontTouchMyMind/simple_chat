@@ -19,7 +19,7 @@ class ChatGroup(models.Model):
     @property
     def link(self):
         channel_name = self.channel_name(self.id)
-        return f'/ws/chat/{self.id}'
+        return f'/ws/chat/{self.id}/'
         # return f'/ws/chat/{channel_name}/'
 
     def __str__(self):
