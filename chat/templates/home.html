@@ -24,34 +24,21 @@
           <img id="profile-img" src="{% static 'image/computer-user_1.png' %}" class="online" alt="" />
           <p>{{ user }}</p>
           <a href="/logout" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
-          <div id="status-options">
-            <ul>
-              <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
-              <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
-              <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
-              <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
-            </ul>
-          </div>
         </div>
       </div>
-        {% block sidepanel %}
-        <div class="description">
-            <br>
-            <br>
-            <p>This is a project for my portfolio and an example of functional testing.</p>
-            <br>
-            <p>The project is developed using Django framework and django-channels library.</p>
-            <br>
-        </div>
-        {% endblock sidepanel %}
+      <div class="description">
+        <br>
+        <br>
+        <p>This is a project for my portfolio and an example of functional testing.</p>
+        <br>
+        <p>The project is developed using Django framework and django-channels library.</p>
+        <br>
+      </div>
     </div>
     <div class="content">
       <div class="contact-profile">
-          {% block header %}
-            <p>WELCOME TO THE CHAT BOX</p>
-          {% endblock header%}
+          <p>WELCOME TO THE CHAT BOX</p>
       </div>
-        {% block content %}
           <div class="rooms">
               <div class="container">
                   <p>Create a room or connect</p>
@@ -66,14 +53,10 @@
                   </div>
               </div>
           </div>
-        {% endblock content%}
     </div>
   </div>
 {{ new_group_id|json_script:"new_group_id" }}
 <script src="{% static 'js/main.js' %}"></script>
-  {% block js %}
-  <script src="{% static 'js/groups.js' %}"></script>
-{% endblock js %}
+<script src="{% static 'js/groups.js' %}"></script>
 </body>
-
 </html>
