@@ -5,7 +5,7 @@ from chat.models import User
 
 @pytest.mark.django_db
 def pytest_creating_users():
-    new_user = User.objects.create_user(username='test_p_1', email='test_p_1@gmail.com', password='QAZ1598753')
+    User.objects.create_user(username='test_p_1', email='test_p_1@gmail.com', password='QAZ1598753')
     assert User.objects.count() == 1
 
 
