@@ -80,8 +80,6 @@ class ChatConsumer(BaseChatConsumer):
         user = User.objects.filter(pk=user_id).first()
         if user:
             participant, _ = GroupParticipant.objects.get_or_create(group=self.group, user=user)
-        # participant = self.get_participants()
-        # return participant
 
     @database_sync_to_async
     def save_message(self, message, user):

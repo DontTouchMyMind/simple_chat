@@ -1,5 +1,3 @@
-import time
-
 import pytest
 
 from channels.db import database_sync_to_async
