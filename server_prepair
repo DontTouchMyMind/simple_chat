@@ -1,0 +1,43 @@
+apt-get update
+apt-get install git
+apt-get install nginx
+apt-get install python3.6-dev
+apt-get install python-setuptools
+apt-get install python3-distutils
+apt-get install supervisor
+
+apt-get install redis-server
+systemctl enable redis-server.service
+
+apt-get install build-essential libtool pkg-config
+
+groupadd chat
+useradd -g chat -d /home/chat -m chat
+
+cd /home/chat
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3.6 get-pip.py
+
+apt-get install python3.6-venv
+
+git clone https://github.com/DontTouchMyMind/simple_chat.git
+
+cd simple_chat
+python3.6 -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+cd /etc/nginx/sites-available/
+mv default default.backup
+nano default
+Paste settings from chat_nginx.conf
+
+cd /etc/supervisor/conf.d/
+nano chat.conf
+Paste settings from chat_supervisor.conf
+
+service supervisor restart
+service supervisor status
+service nginx restart
+service nginx status
