@@ -10,13 +10,13 @@ from .models import User, ChatGroup, GroupParticipant
 @login_required(login_url='/login/')
 def index(request):
     user_list = User.objects.all()
-    new_group_id = ChatGroup.objects.order_by('-id')[:1][0]
+    new_group_id = len(ChatGroup.objects.all()) + 1
 
     context = {
         'title': 'ListUser',
         'users_list': user_list,
         'username': request.user.username,
-        'new_group_id': new_group_id.id + 1,
+        'new_group_id': new_group_id,
     }
     return render(request, 'home.html', context)
 
