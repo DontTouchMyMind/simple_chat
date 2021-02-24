@@ -1,43 +1,64 @@
 apt-get update
-apt-get install git
-apt-get install nginx
-apt-get install python3.6-dev
-apt-get install python-setuptools
-apt-get install python3-distutils
-apt-get install supervisor
-
-apt-get install redis-server
-systemctl enable redis-server.service
-
-apt-get install build-essential libtool pkg-config
-
+apt-get upgrade
+===================================
 groupadd chat
 useradd -g chat -d /home/chat -m chat
+usermod -aG sudo chat
+sudo passwd chat
+===================================
+sudo apt install python3.8
+sudo apt install python3-pip python3-dev libpq-dev python-setuptools python3-distutils python3.8-dev
+sudo apt install build-essential libtool pkg-config
+===================================
+sudo apt install git nginx supervisor
 
-cd /home/chat
+===================================
+sudo apt install redis-server
+systemctl enable redis-server.service
+===================================
+
+==================================
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo apt install postgresql-server-dev-10
+sudo -u postgres psql
+CREATE DATABASE name_db;
+CREATE USER user_name WITH PASSWORD 'user_password';
+ALTER ROLE user_name SET client_encoding TO 'utf8';
+ALTER ROLE user_name SET default_transaction_isolation TO 'read committed';
+ALTER ROLE user_name SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE name_db TO user_name;
+==================================
+apt install curl
+cd /home/chat/
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3.6 get-pip.py
-
-apt-get install python3.6-venv
-
-git clone https://github.com/DontTouchMyMind/simple_chat.git
-
-cd simple_chat
-python3.6 -m venv venv
+python3.8 get-pip.py
+=================================
+sudo apt install python3.8-venv
+python3.8 -m venv venv
 source venv/bin/activate
-
+. venv/bin/activate
+git clone https://github.com/DontTouchMyMind/simple_chat.git
+pip -V
+pip install -U pip
+pip install wheel
 pip install -r requirements.txt
-
+=======================================
+python3 manage.py runserver
+gunicorn simple_chat.wsgi:application --bind 188.225.37.184:8000
+daphne -b 0.0.0.0 -p 8000 simple_chat.asgi:application
+=======================================
 cd /etc/nginx/sites-available/
-mv default default.backup
-nano default
+sudo mv default default.backup
+sudo nano default
 Paste settings from chat_nginx.conf
 
 cd /etc/supervisor/conf.d/
-nano chat.conf
+sudo nano chat.conf
 Paste settings from chat_supervisor.conf
+sudo update-rc.d supervisor enable
 
-service supervisor restart
+sudo service supervisor restart
 service supervisor status
-service nginx restart
+sudo service nginx restart
 service nginx status
