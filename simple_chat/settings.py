@@ -15,19 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a_%+f5)0-^wui))k(dfv_9f%rq#2y+)5%1c8z328)hgva9*h#h'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,18 +61,6 @@ WSGI_APPLICATION = 'simple_chat.wsgi.application'
 ASGI_APPLICATION = 'simple_chat.routing.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -122,13 +97,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'simple_chat/static/')
-]
 STATIC_URL = '/static/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/image/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'image')
@@ -145,3 +114,8 @@ CHANNEL_LAYERS = {
 }
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
+try:
+    from .local_settings import *
+except ImportError:
+    from .prod_settings import *
