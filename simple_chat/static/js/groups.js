@@ -13,7 +13,7 @@ window.onload = function () {
 };
 
 chatSocket.onclose = function (e) {
-    console.error('Chat socket closed unexpectedly')
+    console.log('Chat socket closed')
 };
 
 chatSocket.onmessage = function(e) {

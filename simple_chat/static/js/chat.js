@@ -34,6 +34,10 @@ chatSocket.onmessage = function (e) {
     }
 };
 
+chatSocket.onclose = function (e) {
+    console.log('Chat socket closed')
+};
+
 document.querySelector('#chat-message-input').onkeyup = function(e) {
     if (e.keyCode === 13) {  // enter, return
         document.querySelector('#chat-message-submit').click();
