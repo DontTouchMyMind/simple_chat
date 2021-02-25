@@ -5,7 +5,7 @@ const  chatSocket = new WebSocket(
           + '/ws/groups/'
       );
 
-window.onload = function () {
+chatSocket.onopen = function () {
     chatSocket.send(JSON.stringify({
         'event': 'group.list',
         'data': {}
@@ -57,3 +57,4 @@ document.querySelector('#room-name-submit').onclick = function(e) {
 
     window.location.pathname = '/chat/' + newGroupId + '/';
 };
+window.addEventListener('load')
