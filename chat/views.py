@@ -13,7 +13,6 @@ def index(request):
     new_group_id = len(ChatGroup.objects.all()) + 1
 
     context = {
-        'title': 'ListUser',
         'users_list': user_list,
         'username': request.user.username,
         'new_group_id': new_group_id,
@@ -22,7 +21,7 @@ def index(request):
 
 
 def room(request, group_id):
-    users_list = User.objects.all()
+    users_list = User.objects.all().exclude(pk=request.user.id)
     group_name = ChatGroup.objects.filter(pk=group_id).first()
     group_users_id = list(GroupParticipant.objects.filter(group=group_id).values_list('user', flat=True))
     group_users_name = [user.username for user in users_list if user.id in group_users_id]
@@ -31,8 +30,7 @@ def room(request, group_id):
         'group_id': group_id,
         'group_name': group_name,
         'group_users': group_users_name,
-        'title': 'ListUser',
-        'users_list': users_list[1:],
+        'users_list': users_list,
         'username': request.user.username,
     }
     return render(request, 'room.html', context)
